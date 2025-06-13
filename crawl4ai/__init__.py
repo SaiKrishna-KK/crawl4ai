@@ -65,6 +65,7 @@ from .deep_crawling import (
     DFSDeepCrawlStrategy,
     DeepCrawlDecorator,
 )
+from .docs_manager import DocsManager, DependencyDocsManager
 
 __all__ = [
     "AsyncLoggerBase",
@@ -124,7 +125,9 @@ __all__ = [
     "Crawl4aiDockerClient",
     "ProxyRotationStrategy",
     "RoundRobinProxyStrategy",
-    "ProxyConfig"
+    "ProxyConfig",
+    "DocsManager",
+    "DependencyDocsManager"
 ]
 
 
