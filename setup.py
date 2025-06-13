@@ -43,7 +43,7 @@ except Exception:
 setup(
     name="Crawl4AI",
     version=version,
-    description="🚀🤖 Crawl4AI: Open-source LLM Friendly Web Crawler & scraper",
+    description="Documentation crawler and search tool",
     long_description=open("README.md", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
     url="https://github.com/unclecode/crawl4ai",

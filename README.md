@@ -1,4 +1,4 @@
-# 🚀🤖 Crawl4AI: Open-source LLM Friendly Web Crawler & Scraper.
+# 📚 Crawl4AI: Documentation Crawler
 
 <div align="center">
 
@@ -19,7 +19,7 @@
 
 </div>
 
-Crawl4AI is the #1 trending GitHub repository, actively maintained by a vibrant community. It delivers blazing-fast, AI-ready web crawling tailored for LLMs, AI agents, and data pipelines. Open source, flexible, and built for real-time performance, Crawl4AI empowers developers with unmatched speed, precision, and deployment ease.  
+This project focuses on gathering and indexing documentation for your favourite libraries. Use the included managers to download docs, build search indexes and query them locally.
 
 [✨ Check out latest update v0.6.0](#-recent-updates)
 
@@ -63,116 +63,38 @@ crawl4ai-setup
 crawl4ai-doctor
 ```
 
-If you encounter any browser-related issues, you can install them manually:
-```bash
-python -m playwright install --with-deps chromium
-```
-
-2. Run a simple web crawl with Python:
+2. Build a local documentation index:
 ```python
 import asyncio
-from crawl4ai import *
+from crawl4ai.docs_manager import DependencyDocsManager
+
+DEPENDENCIES = {
+    "playwright": "https://playwright.dev/python/docs/intro",
+    "beautifulsoup4": "https://www.crummy.com/software/BeautifulSoup/bs4/doc/",
+}
 
 async def main():
-    async with AsyncWebCrawler() as crawler:
-        result = await crawler.arun(
-            url="https://www.nbcnews.com/business",
-        )
-        print(result.markdown)
+    mgr = DependencyDocsManager(DEPENDENCIES)
+    await mgr.fetch_docs()
+    await mgr.llm_text.generate_index_files()
+    print(mgr.search("launch browser"))
 
-if __name__ == "__main__":
-    asyncio.run(main())
+asyncio.run(main())
 ```
 
-3. Or use the new command-line interface:
+3. Use the CLI to update and search:
 ```bash
-# Basic crawl with markdown output
-crwl https://www.nbcnews.com/business -o markdown
-
-# Deep crawl with BFS strategy, max 10 pages
-crwl https://docs.crawl4ai.com --deep-crawl bfs --max-pages 10
-
-# Use LLM extraction with a specific question
-crwl https://www.example.com/products -q "Extract all product prices"
+crwl docs update
+crwl docs search "playwright screenshot" --build-index
 ```
 
 ## ✨ Features 
+- **Dependency Documentation** – fetch docs for your favourite packages.
+- **Index Generation** – build BM25 indexes for fast search.
+- **CLI Tools** – update and search docs via `crwl docs` commands.
+- **Streamlit App** – basic UI for fetching and querying docs.
 
-<details>
-<summary>📝 <strong>Markdown Generation</strong></summary>
 
-- 🧹 **Clean Markdown**: Generates clean, structured Markdown with accurate formatting.
-- 🎯 **Fit Markdown**: Heuristic-based filtering to remove noise and irrelevant parts for AI-friendly processing.
-- 🔗 **Citations and References**: Converts page links into a numbered reference list with clean citations.
-- 🛠️ **Custom Strategies**: Users can create their own Markdown generation strategies tailored to specific needs.
-- 📚 **BM25 Algorithm**: Employs BM25-based filtering for extracting core information and removing irrelevant content. 
-</details>
-
-<details>
-<summary>📊 <strong>Structured Data Extraction</strong></summary>
-
-- 🤖 **LLM-Driven Extraction**: Supports all LLMs (open-source and proprietary) for structured data extraction.
-- 🧱 **Chunking Strategies**: Implements chunking (topic-based, regex, sentence-level) for targeted content processing.
-- 🌌 **Cosine Similarity**: Find relevant content chunks based on user queries for semantic extraction.
-- 🔎 **CSS-Based Extraction**: Fast schema-based data extraction using XPath and CSS selectors.
-- 🔧 **Schema Definition**: Define custom schemas for extracting structured JSON from repetitive patterns.
-
-</details>
-
-<details>
-<summary>🌐 <strong>Browser Integration</strong></summary>
-
-- 🖥️ **Managed Browser**: Use user-owned browsers with full control, avoiding bot detection.
-- 🔄 **Remote Browser Control**: Connect to Chrome Developer Tools Protocol for remote, large-scale data extraction.
-- 👤 **Browser Profiler**: Create and manage persistent profiles with saved authentication states, cookies, and settings.
-- 🔒 **Session Management**: Preserve browser states and reuse them for multi-step crawling.
-- 🧩 **Proxy Support**: Seamlessly connect to proxies with authentication for secure access.
-- ⚙️ **Full Browser Control**: Modify headers, cookies, user agents, and more for tailored crawling setups.
-- 🌍 **Multi-Browser Support**: Compatible with Chromium, Firefox, and WebKit.
-- 📐 **Dynamic Viewport Adjustment**: Automatically adjusts the browser viewport to match page content, ensuring complete rendering and capturing of all elements.
-
-</details>
-
-<details>
-<summary>🔎 <strong>Crawling & Scraping</strong></summary>
-
-- 🖼️ **Media Support**: Extract images, audio, videos, and responsive image formats like `srcset` and `picture`.
-- 🚀 **Dynamic Crawling**: Execute JS and wait for async or sync for dynamic content extraction.
-- 📸 **Screenshots**: Capture page screenshots during crawling for debugging or analysis.
-- 📂 **Raw Data Crawling**: Directly process raw HTML (`raw:`) or local files (`file://`).
-- 🔗 **Comprehensive Link Extraction**: Extracts internal, external links, and embedded iframe content.
-- 🛠️ **Customizable Hooks**: Define hooks at every step to customize crawling behavior.
-- 💾 **Caching**: Cache data for improved speed and to avoid redundant fetches.
-- 📄 **Metadata Extraction**: Retrieve structured metadata from web pages.
-- 📡 **IFrame Content Extraction**: Seamless extraction from embedded iframe content.
-- 🕵️ **Lazy Load Handling**: Waits for images to fully load, ensuring no content is missed due to lazy loading.
-- 🔄 **Full-Page Scanning**: Simulates scrolling to load and capture all dynamic content, perfect for infinite scroll pages.
-
-</details>
-
-<details>
-<summary>🚀 <strong>Deployment</strong></summary>
-
-- 🐳 **Dockerized Setup**: Optimized Docker image with FastAPI server for easy deployment.
-- 🔑 **Secure Authentication**: Built-in JWT token authentication for API security.
-- 🔄 **API Gateway**: One-click deployment with secure token authentication for API-based workflows.
-- 🌐 **Scalable Architecture**: Designed for mass-scale production and optimized server performance.
-- ☁️ **Cloud Deployment**: Ready-to-deploy configurations for major cloud platforms.
-
-</details>
-
-<details>
-<summary>🎯 <strong>Additional Features</strong></summary>
-
-- 🕶️ **Stealth Mode**: Avoid bot detection by mimicking real users.
-- 🏷️ **Tag-Based Content Extraction**: Refine crawling based on custom tags, headers, or metadata.
-- 🔗 **Link Analysis**: Extract and analyze all links for detailed data exploration.
-- 🛡️ **Error Handling**: Robust error management for seamless execution.
-- 🔐 **CORS & Static Serving**: Supports filesystem-based caching and cross-origin requests.
-- 📖 **Clear Documentation**: Simplified and updated guides for onboarding and advanced usage.
-- 🙌 **Community Recognition**: Acknowledges contributors and pull requests for transparency.
-
-</details>
 
 ## Try it Now!
 
